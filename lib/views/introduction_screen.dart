@@ -48,55 +48,85 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
         child: Stack(
           children: [
             // Skip button
-            PageView.builder(
-              controller: _pageController,
-              itemCount: pageList.length,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentPage = index;
-                });
+            GestureDetector(
+              onHorizontalDragEnd: (details) {
+                if (details.primaryVelocity! > 0) {
+                  // Swipe ke kanan
+                  if (_currentPage > 0) {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                } else if (details.primaryVelocity! < 0) {
+                  // Swipe ke kiri
+                  if (_currentPage < pageList.length - 1) {
+                    _pageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                }
               },
-              itemBuilder: (context, index) {
-                final page = pageList[index];
-                return Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 100),
-                      Image.asset(page['imageAsset'], width: 292, height: 349),
-                      const SizedBox(height: 120),
-                      Text(
-                        page['title'],
-                        style: headline3.copyWith(
-                          color: cPrimary,
-                          fontWeight: bold,
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: pageList.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentPage = index;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  final page = pageList[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 100),
+                        Image.asset(
+                          page['imageAsset'],
+                          width: 292,
+                          height: 349,
                         ),
-                      ),
-                      Text(
-                        page['subtitle'],
-                        style: subtitle1.copyWith(color: cPrimary),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                        const SizedBox(height: 80),
+                        Text(
+                          page['title'],
+                          style: headline3.copyWith(
+                            color: cPrimary,
+                            fontWeight: bold,
+                          ),
+                        ),
+                        Text(
+                          page['subtitle'],
+                          style: subtitle1.copyWith(color: cPrimary),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
 
             // Page content
-            Positioned(
-              top: 10,
-              right: 10,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-                child: const Text('Get Started'),
+            if (_currentPage == pageList.length - 1)
+              Positioned(
+                top: 10,
+                right: 10,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: cPrimary,
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: const Text('Get Started'),
+                ),
               ),
-            ),
 
             // Page indicators
             Positioned(
