@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Belum punya akun?"),
+                    Text("Belum memiliki akun?"),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
