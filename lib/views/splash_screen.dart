@@ -1,4 +1,6 @@
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:newshive/views/utils/helper.dart';
 import 'dart:async';
 import '../views/introduction_screen.dart';
 
@@ -38,30 +40,15 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: cSecondary,
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Spacer(flex: 2),
-            // Logo and title
-            Center(
-              child: Image.asset(
-                'images/logo and title.png',
-                width: 160,
-                height: 180,
-              ),
-            ),
-            const Spacer(flex: 2),
-            // Loading animation
-            RotationTransition(
-              turns: _controller,
-              child: Center(
-                child: Image.asset('images/loading.png', width: 50, height: 50),
-              ),
-            ),
-            const Spacer(),
-          ],
+        child: AnimatedSplashScreen(
+          splash: 'images/splash_screen.gif',
+          splashIconSize: 2000,
+          backgroundColor: backgroundColor,
+          centered: true,
+          nextScreen: const IntroductionScreen(),
+          duration: 3000,
         ),
       ),
     );

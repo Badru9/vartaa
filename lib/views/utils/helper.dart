@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+Color backgroundColor = const Color(0xff222222);
+
 //* Color
-Color cPrimary = const Color(0xff2D336B);
+Color cPrimary = const Color(0xffF1C615);
+Color cSecondary = const Color(0xff3A3A3A);
 Color cTextBlue = const Color(0xff4E4B66);
 Color cLinear = const Color(0xffA9B5DF);
 Color cBlack = const Color(0xff000000);
 Color cWhite = const Color(0xffFFFFFF);
+Color cSmokeWhite = const Color(0xffF5F5F5);
 Color cGrey = const Color(0xffF1F1F5);
 Color cError = const Color(0xffFF4545);
 Color cSuccess = const Color(0xff007360);
@@ -64,6 +68,11 @@ TextStyle subtitle2 = GoogleFonts.poppins(fontSize: 14);
 TextStyle caption = GoogleFonts.poppins(fontSize: 12);
 TextStyle overline = GoogleFonts.poppins(fontSize: 10);
 
+OutlineInputBorder defaultInputBorder = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(16),
+  borderSide: BorderSide(color: cSecondary),
+);
+
 //* Border
 OutlineInputBorder enableBorder = OutlineInputBorder(
   borderSide: BorderSide(color: cBlack),
@@ -94,6 +103,14 @@ BoxDecoration fieldDecortaion = BoxDecoration(
 BoxDecoration disabledFieldDecortaion = BoxDecoration(
   borderRadius: BorderRadius.circular(5),
   color: Colors.grey[100],
+);
+
+// Box Shadow
+
+BoxShadow defaultShadow = BoxShadow(
+  color: cSecondary.withAlpha(20),
+  blurRadius: 5,
+  spreadRadius: 5,
 );
 
 //* Field Variables

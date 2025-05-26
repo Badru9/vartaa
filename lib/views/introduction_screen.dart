@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newshive/views/auth/login_screen.dart';
 import 'package:newshive/views/utils/helper.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroductionScreen extends StatefulWidget {
   const IntroductionScreen({super.key});
@@ -17,21 +18,18 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   List<Map<String, dynamic>> pageList = [
     {
       'imageAsset': 'images/img intro 1.png',
-      'title': 'The World at Your Fingertips',
-      'subtitle':
-          'Get 24/7 updates on global news – from breaking politics to cultural trends, all in one place',
+      'title': 'News Without Borders',
+      'subtitle': 'Stay informed globally. Breaking news in your pocket.',
     },
     {
       'imageAsset': 'images/img intro 2.png',
-      'title': 'Tailored to Your Curiosity',
-      'subtitle':
-          'Select your interests and receive handpicked stories. Technology, sports, or entertainment – we\'ve got you covered',
+      'title': 'Your News, Your Way',
+      'subtitle': 'Pick your interests. Get stories you love.',
     },
     {
       'imageAsset': 'images/img intro 3.png',
-      'title': 'Trusted Updates in Real-Time',
-      'subtitle':
-          'Instant alerts for breaking news, rigorously fact-checked by our editors before they reach you',
+      'title': 'Fast and Verified',
+      'subtitle': 'Instant breaking news. Editor-verified accuracy.',
     },
   ];
 
@@ -44,6 +42,7 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: cSmokeWhite,
       body: SafeArea(
         child: Stack(
           children: [
@@ -78,30 +77,44 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 },
                 itemBuilder: (context, index) {
                   final page = pageList[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 100),
-                        Image.asset(
-                          page['imageAsset'],
-                          width: 292,
-                          height: 349,
-                        ),
-                        const SizedBox(height: 80),
-                        Text(
-                          page['title'],
-                          style: headline3.copyWith(
-                            color: cPrimary,
-                            fontWeight: bold,
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.center,
+                        colors: [
+                          cPrimary.withAlpha(50),
+                          cPrimary.withAlpha(30),
+                          cPrimary.withAlpha(10),
+                          cPrimary.withAlpha(0),
+                        ],
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 100),
+                          Image.asset(
+                            page['imageAsset'],
+                            width: double.infinity,
+                            height: 349,
                           ),
-                        ),
-                        Text(
-                          page['subtitle'],
-                          style: subtitle1.copyWith(color: cPrimary),
-                        ),
-                      ],
+                          const SizedBox(height: 80),
+                          Text(
+                            page['title'],
+                            style: headline3.copyWith(
+                              color: cSecondary,
+                              fontWeight: bold,
+                            ),
+                          ),
+                          Text(
+                            page['subtitle'],
+                            style: subtitle1.copyWith(color: cSecondary),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -115,8 +128,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 right: 10,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: cPrimary,
-                    foregroundColor: Colors.white,
+                    backgroundColor: cSecondary,
+                    foregroundColor: cPrimary,
                   ),
                   onPressed: () {
                     Navigator.push(
@@ -128,26 +141,39 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                 ),
               ),
 
+            if (_currentPage == 0)
+              Positioned(
+                top: 10,
+                left: 10,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: cSecondary,
+                    foregroundColor: cPrimary,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: const Text('Skip'),
+                ),
+              ),
+
             // Page indicators
             Positioned(
               bottom: 25,
               left: 0,
               right: 0,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  pageList.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 5),
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color:
-                          _currentPage == index
-                              ? cPrimary
-                              : Colors.grey.shade300,
-                    ),
+              child: Center(
+                child: SmoothPageIndicator(
+                  controller: _pageController,
+                  count: pageList.length,
+                  effect: WormEffect(
+                    dotColor: cSecondary,
+                    activeDotColor: cPrimary,
+                    dotWidth: 10,
+                    type: WormType.thinUnderground,
                   ),
                 ),
               ),
