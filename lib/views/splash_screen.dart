@@ -43,12 +43,12 @@ class _SplashScreenState extends State<SplashScreen>
       backgroundColor: cSecondary,
       body: SafeArea(
         child: AnimatedSplashScreen(
-          splash: 'images/splash_screen.gif',
-          splashIconSize: 2000,
+          splash: 'images/logo_dark.png',
           backgroundColor: backgroundColor,
+          splashIconSize: 30,
           centered: true,
           nextScreen: const IntroductionScreen(),
-          duration: 3000,
+          duration: 3100,
         ),
       ),
     );
