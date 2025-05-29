@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newshive/views/auth/register_screen.dart';
-import 'package:newshive/views/utils/form_validator.dart';
-import 'package:newshive/views/utils/helper.dart';
+import 'package:newshive/screens/auth/register_screen.dart';
+import 'package:newshive/utils/form_validator.dart';
+import 'package:newshive/utils/helper.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: _handleLogin,
-                          child: Text('Login', style: subtitle2),
+                          child: Text('Masuk ya', style: subtitle2),
                         ),
                       ),
                       SizedBox(height: 14),
@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               );
                             },
-                            child: Text('Register'),
+                            child: Text('Buat Akun Baru'),
                           ),
                         ],
                       ),

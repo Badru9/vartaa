@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:newshive/views/auth/login_screen.dart';
-import 'package:newshive/views/utils/helper.dart';
+import 'package:newshive/screens/auth/login_screen.dart';
+import 'package:newshive/utils/helper.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class IntroductionScreen extends StatefulWidget {

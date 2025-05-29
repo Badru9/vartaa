@@ -1,8 +1,9 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:newshive/views/utils/helper.dart';
+import 'package:newshive/screens/home_screen.dart';
+import 'package:newshive/utils/helper.dart';
 import 'dart:async';
-import '../views/introduction_screen.dart';
+import 'introduction_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,12 +24,6 @@ class _SplashScreenState extends State<SplashScreen>
       duration: const Duration(seconds: 2),
       vsync: this,
     )..repeat();
-
-    Timer(const Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const IntroductionScreen()),
-      );
-    });
   }
 
   @override
@@ -40,14 +35,18 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cSecondary,
+      backgroundColor: cPrimary,
       body: SafeArea(
         child: AnimatedSplashScreen(
-          splash: 'images/logo_dark.png',
-          backgroundColor: backgroundColor,
-          splashIconSize: 30,
+          splash: 'images/logo_light.png',
+          backgroundColor: cPrimary,
+          splashIconSize: 80,
           centered: true,
-          nextScreen: const IntroductionScreen(),
+          curve: Curves.bounceOut,
+          splashTransition: SplashTransition.slideTransition,
+          animationDuration: Duration(milliseconds: 1100),
+          // nextScreen: const IntroductionScreen(),
+          nextScreen: const HomeScreen(),
           duration: 3100,
         ),
       ),

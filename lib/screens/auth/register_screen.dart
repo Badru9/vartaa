@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newshive/views/auth/login_screen.dart';
-import 'package:newshive/views/utils/form_validator.dart';
-import 'package:newshive/views/utils/helper.dart';
+import 'package:newshive/screens/auth/login_screen.dart';
+import 'package:newshive/utils/form_validator.dart';
+import 'package:newshive/utils/helper.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -201,14 +201,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: _handleRegister,
-                          child: Text('Register', style: subtitle2),
+                          child: Text('Daftar', style: subtitle2),
                         ),
                       ),
                       SizedBox(height: 14),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Sudah punya akun?"),
+                          Text("Sudah memiliki akun?"),
                           TextButton(
                             onPressed: () {
                               Navigator.push(
@@ -218,7 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ),
                               );
                             },
-                            child: Text('Login'),
+                            child: Text('Masuk'),
                           ),
                         ],
                       ),
