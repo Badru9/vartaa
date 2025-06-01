@@ -42,6 +42,7 @@ dependencies:
   flutter_native_splash: ^2.4.6
   phosphor_flutter: ^2.1.0
   carousel_slider: ^5.0.0
+  http: ^1.4.0
 
 dev_dependencies:
   flutter_test:

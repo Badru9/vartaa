@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:newshive/utils/helper.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:newshive/controllers/news_controller.dart';
 
 // Widget NavLink
 class NavLink extends StatelessWidget {
@@ -210,6 +211,11 @@ class _HomeScreenState extends State<HomeScreen> {
           'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=200&fit=crop&crop=center',
     },
   ];
+  @override
+  void setState(VoidCallback fn) {
+    super.setState(fn);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
