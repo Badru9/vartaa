@@ -1,53 +1,54 @@
 String? validateName(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Full name can\'t be empty';
+    return 'Full name tidak boleh kosong';
   } else if (value.length <= 4) {
-    return 'Full name must be more than 3 characters';
+    return 'Full name harus melebihi 3 karakter';
   } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
-    return 'Full name can only contain letters';
+    return 'Full name hanya boleh berisi karakter / huruf';
   }
   return null;
 }
 
 String? validateUsername(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Username can\'t be empty';
+    return 'Username tidak boleh kosong';
   } else if (value.length <= 4) {
-    return 'Username must be more than 3 characters';
+    return 'Username harus melebihi 3 karakter';
   } else if (!RegExp(r"^[a-zA-Z\s]+$").hasMatch(value)) {
-    return 'Username can only contain letters';
+    return 'Username hanya boleh berisi karakter / huruf';
   }
   return null;
 }
 
 String? validatePhoneNumber(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Phone number can\'t be empty';
+    return 'Phone number tidak boleh kosong';
   } else if (value.length < 11) {
-    return 'Phone number must be more than 9 characters';
+    return 'NO HP harus melebihi 9 number';
   } else if (!RegExp(r"^[0-9]+$").hasMatch(value)) {
-    return 'Phone number can only contain numbers';
+    return 'NO HP hanya mengandung number';
   }
   return null;
 }
 
 String? validateEmail(String? value) {
   if (value!.isEmpty) {
-    return 'Email can\'t be empty';
+    return 'Email tidak boleh kosong';
   } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-    return 'Please enter a valid email';
+    return 'Masukkan email yang aktif';
   } else {
     return null;
   }
 }
 
 String? validatePassword(String? value) {
+  final RegExp alphabetRegExp = RegExp(r'^(?=.*[a-zA-Z]).*$');
   if (value!.isEmpty) {
-    return 'Password can\'t be empty';
+    return 'Password tidak boleh kosong';
   } else if (value.length < 8) {
-    return 'Password can\'t be less than 8 characters';
-  } else if (!RegExp(r'^(?=.*[a-z])(?=.*[0-9]).{8,}$').hasMatch(value)) {
-    return 'Password must be 8 - 16 characters long and contain alphabets and numbers';
+    return 'Password tidak boleh kurang dari 8 karakter';
+  } else if (!alphabetRegExp.hasMatch(value)) {
+    return 'Password harus mengandung setidaknya satu huruf';
   } else {
     return null;
   }
@@ -55,11 +56,11 @@ String? validatePassword(String? value) {
 
 String? validateOtp(String? value) {
   if (value!.isEmpty) {
-    return 'OTP code can\'t be empty';
+    return 'OTP code tidak boleh kosong';
   } else if (value.length != 6) {
-    return 'OTP code must consist of 6 digits';
+    return 'Kode OTP harus memiliki 6 number';
   } else if (!RegExp(r'^[0-9]+$').hasMatch(value)) {
-    return 'OTP code can only contain numbers';
+    return 'Kode OTP hanya berupa number';
   } else {
     return null;
   }
@@ -67,16 +68,16 @@ String? validateOtp(String? value) {
 
 String? validateDropdown(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Please select Value';
+    return 'Pilih Opsi';
   }
   return null;
 }
 
 String? validateAddress(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Address can\'t be empty';
+    return 'Alamat tidak boleh kosong';
   } else if (value.length < 10) {
-    return 'Address is incomplete, please enter more details';
+    return 'Alamat tidak lengkap, Tolong tambahkan detail';
   } else {
     return null;
   }
@@ -84,9 +85,9 @@ String? validateAddress(String? value) {
 
 String? validateDescription(String? value) {
   if (value == null || value.isEmpty) {
-    return 'Description can\'t be empty';
+    return 'Deskripsi tidak boleh kosong';
   } else if (value.length < 10) {
-    return 'Description is incomplete, please enter more details';
+    return 'Deskripsi tidak lengkap, Tolong tambahkan detail';
   } else {
     return null;
   }

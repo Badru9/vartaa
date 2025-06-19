@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:newshive/utils/helper.dart';
+import 'package:provider/provider.dart';
+import 'package:vartaa/controllers/auth_controller.dart';
+import 'package:vartaa/controllers/news_controller.dart';
+import 'package:vartaa/utils/helper.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NewsController()),
+        ChangeNotifierProvider(create: (_) => AuthController()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

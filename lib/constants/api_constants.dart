@@ -1,6 +1,11 @@
+// const bool development = false;
+
 class ApiConstant {
-  static const String baseUrl = 'https://newsapi.org/v2';
-  static const String apiKey = 'b56303cf23144f7db2a1e0c725900076';
+  static const String baseUrl = 'http://45.149.187.204:3000';
+  static const String apiKey =
+      'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMTQ0MmEyNy03NzRhLTQwMmItOTliYi00ZmY3OGE0MTllOTciLCJlbWFpbCI6Im5ld3NAaXRnLmFjLmlkIiwiaWF0IjoxNzUwMzMwMDMyLCJleHAiOjE3NTA0MTY0MzJ9.BwAOhKQcutHPuPy5XHBsVawwCHVntjvskVJ7HV6QFs0';
+
+  static const String loginEndpoint = '/api/auth/login';
 
   static const String everythingEndpoint = '/everything';
   static const String topHeadlineCountryEndpoint = '/top-headlines';
@@ -12,7 +17,10 @@ class ApiConstant {
   };
 
   static Map<String, String> get headers {
-    return {'X-Api-Key': apiKey, 'Content-Type': 'application/json'};
+    return {
+      'Authorization': 'Bearer $apiKey',
+      'Content-Type': 'application/json',
+    };
   }
 
   static Map<String, String> get authHeader {

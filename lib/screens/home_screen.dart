@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:newshive/utils/helper.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:vartaa/utils/helper.dart';
+// import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:newshive/controllers/news_controller.dart';
+import 'package:vartaa/controllers/news_controller.dart';
+import 'package:vartaa/constants/constants.dart';
 
 // Widget NavLink
 class NavLink extends StatelessWidget {
@@ -34,16 +35,28 @@ class NavLink extends StatelessWidget {
       child: Container(
         padding:
             padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        child: Text(
-          text,
-          style: TextStyle(
-            color:
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          decoration: BoxDecoration(
+            borderRadius:
                 isActive
-                    ? (activeColor ?? Colors.white)
-                    : (inactiveColor ?? Colors.grey[400]),
-            fontSize: fontSize ?? 14,
-            fontWeight:
-                isActive ? (fontWeight ?? FontWeight.w600) : FontWeight.normal,
+                    ? BorderRadius.all(Radius.circular(50))
+                    : BorderRadius.zero,
+            color: isActive ? cPrimary.withAlpha(80) : Colors.transparent,
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+              color:
+                  isActive
+                      ? (activeColor ?? Colors.white)
+                      : (inactiveColor ?? Colors.grey[400]),
+              fontSize: fontSize ?? 14,
+              fontWeight:
+                  isActive
+                      ? (fontWeight ?? FontWeight.w600)
+                      : FontWeight.normal,
+            ),
           ),
         ),
       ),
@@ -60,10 +73,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _activeIndex = 0;
-  int _navBarIndex = 0;
+  String queryString = 'home';
+
+  final _navScrollController = ScrollController();
+  late NewsController _newsController;
+
+  // int _navBarIndex = 0;
 
   // Data navigation items
-  final List<String> _navItems = ['Home', 'Technology', 'Sports', 'Business'];
+  // final List<String> _navItems = ['Home', 'Technology', 'Sports', 'Business'];
 
   void _onNavTap(int index) {
     setState(() {
@@ -76,34 +94,15 @@ class _HomeScreenState extends State<HomeScreen> {
         print('Navigate to Home');
         break;
       case 1:
+        queryString = 'tech';
         print('Navigate to Technology');
         break;
       case 2:
+        queryString = 'sport';
         print('Navigate to Sports');
         break;
       case 3:
-        print('Navigate to Business');
-        break;
-    }
-  }
-
-  void _onBottomNavTap(int index) {
-    setState(() {
-      _navBarIndex = index;
-    });
-
-    // Handle navigation logic
-    switch (index) {
-      case 0:
-        print('Navigate to Home');
-        break;
-      case 1:
-        print('Navigate to Technology');
-        break;
-      case 2:
-        print('Navigate to Sports');
-        break;
-      case 3:
+        queryString = 'business';
         print('Navigate to Business');
         break;
     }
@@ -211,9 +210,18 @@ class _HomeScreenState extends State<HomeScreen> {
           'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=200&fit=crop&crop=center',
     },
   ];
+
   @override
   void setState(VoidCallback fn) {
+    // TODO: implement setState
     super.setState(fn);
+
+    _newsController = NewsController();
+    _loadNews(queryString);
+  }
+
+  void _loadNews(String query) {
+    _newsController.fetchEverything(query: query);
   }
 
   @override
@@ -228,23 +236,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Image.asset('images/logo_dark.png', width: 100),
                   vsMedium,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 12,
-                    children:
-                        _navItems.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final item = entry.value;
-                          return NavLink(
-                            text: item,
-                            isActive: _activeIndex == index,
-                            onTap: () => _onNavTap(index),
-                            activeColor: Colors.white,
-                            inactiveColor: Colors.grey[400],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          );
-                        }).toList(),
+                  SingleChildScrollView(
+                    controller: _navScrollController,
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 12,
+                      children:
+                          navLinks.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final item = entry.value;
+                            return NavLink(
+                              text: item,
+                              isActive: _activeIndex == index,
+                              onTap: () => _onNavTap(index),
+                              activeColor: Colors.white,
+                              inactiveColor: Colors.grey[400],
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            );
+                          }).toList(),
+                    ),
                   ),
                 ],
               ),
@@ -438,36 +450,37 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+        // ListView Builder
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: cBlack,
-        unselectedItemColor: cBlack,
-        selectedFontSize: 12,
-        currentIndex: _navBarIndex,
-        onTap: _onBottomNavTap,
-        items: [
-          BottomNavigationBarItem(
-            icon: PhosphorIcon(PhosphorIcons.house(), size: 14),
-            label: 'Beranda',
-            backgroundColor: cPrimary,
-          ),
-          BottomNavigationBarItem(
-            icon: PhosphorIcon(PhosphorIcons.newspaper(), size: 14),
-            label: 'Kategori',
-            backgroundColor: cPrimary,
-          ),
-          BottomNavigationBarItem(
-            icon: PhosphorIcon(PhosphorIcons.magnifyingGlass(), size: 14),
-            label: 'Cari',
-            backgroundColor: cPrimary,
-          ),
-          BottomNavigationBarItem(
-            icon: PhosphorIcon(PhosphorIcons.user(), size: 14),
-            label: 'Profil',
-            backgroundColor: cPrimary,
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   selectedItemColor: cBlack,
+      //   unselectedItemColor: cBlack,
+      //   selectedFontSize: 12,
+      //   currentIndex: _navBarIndex,
+      //   onTap: _onBottomNavTap,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: PhosphorIcon(PhosphorIcons.house(), size: 14),
+      //       label: 'Beranda',
+      //       backgroundColor: cPrimary,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: PhosphorIcon(PhosphorIcons.newspaper(), size: 14),
+      //       label: 'Kategori',
+      //       backgroundColor: cPrimary,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: PhosphorIcon(PhosphorIcons.magnifyingGlass(), size: 14),
+      //       label: 'Cari',
+      //       backgroundColor: cPrimary,
+      //     ),
+      //     BottomNavigationBarItem(
+      //       icon: PhosphorIcon(PhosphorIcons.user(), size: 14),
+      //       label: 'Profil',
+      //       backgroundColor: cPrimary,
+      //     ),
+      //   ],
+      // ),
     );
   }
 }

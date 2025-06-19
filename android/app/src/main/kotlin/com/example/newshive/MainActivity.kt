@@ -1,4 +1,4 @@
-package com.example.newshive
+package com.example.vartaa
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -12,7 +12,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "newshive (Flutter Chrome)",
+      "name": "vartaa (Flutter Chrome)",
       "program": "lib/main.dart",
       "deviceId": "chrome",
       "request": "launch",

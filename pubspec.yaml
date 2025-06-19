@@ -1,4 +1,4 @@
-name: newshive
+name: vartaa
 description: 'A new Flutter project.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -43,6 +43,7 @@ dependencies:
   phosphor_flutter: ^2.1.0
   carousel_slider: ^5.0.0
   http: ^1.4.0
+  provider: ^6.1.5
 
 dev_dependencies:
   flutter_test:

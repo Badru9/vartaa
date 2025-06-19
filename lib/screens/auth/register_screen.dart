@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:newshive/screens/auth/login_screen.dart';
-import 'package:newshive/utils/form_validator.dart';
-import 'package:newshive/utils/helper.dart';
+import 'package:vartaa/screens/auth/login_screen.dart';
+import 'package:vartaa/utils/form_validator.dart';
+import 'package:vartaa/utils/helper.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -118,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         controller: _passwordController,
                         obscureText: _isObsecure,
                         decoration: InputDecoration(
-                          hintText: "Input Password",
+                          hintText: "Masukkan Password",
                           hintStyle: subtitle2,
                           labelText: "Password",
                           labelStyle: subtitle2,
