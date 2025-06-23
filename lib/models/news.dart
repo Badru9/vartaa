@@ -1,9 +1,9 @@
-import 'article.dart';
+import 'author_article.dart';
 
 class NewsModel {
   String? status;
   int? totalResults;
-  List<Article>? articles;
+  List<AuthorArticle>? articles;
 
   NewsModel({this.status, this.totalResults, this.articles});
 
@@ -13,8 +13,8 @@ class NewsModel {
       totalResults: json['totalResults'],
       articles:
           json['articles'] != null
-              ? List<Article>.from(
-                json['articles'].map((x) => Article.fromJson(x)),
+              ? List<AuthorArticle>.from(
+                json['articles'].map((x) => AuthorArticle.fromJson(x)),
               )
               : null,
     );

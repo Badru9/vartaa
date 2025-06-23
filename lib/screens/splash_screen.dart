@@ -35,18 +35,17 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cPrimary,
       body: SafeArea(
         child: AnimatedSplashScreen(
           splash: 'images/logo_light.png',
-          backgroundColor: cPrimary,
+          backgroundColor: cSmokeWhite,
           splashIconSize: 80,
           centered: true,
           curve: Curves.bounceOut,
           splashTransition: SplashTransition.slideTransition,
           animationDuration: Duration(milliseconds: 1100),
-          nextScreen: const IntroductionScreen(),
-          // nextScreen: const HomeScreen(),
+          // nextScreen: const IntroductionScreen(),
+          nextScreen: const HomeScreen(),
           duration: 3100,
         ),
       ),

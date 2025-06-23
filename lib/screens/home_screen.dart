@@ -34,31 +34,117 @@ class NavLink extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
-            borderRadius:
-                isActive
-                    ? BorderRadius.all(Radius.circular(50))
-                    : BorderRadius.zero,
-            color: isActive ? cPrimary.withAlpha(80) : Colors.transparent,
+            borderRadius: BorderRadius.circular(20),
+            color: isActive ? Colors.black : Colors.transparent,
+            border: Border.all(color: Colors.grey.withAlpha(100), width: 1),
           ),
           child: Text(
             text,
             style: TextStyle(
-              color:
-                  isActive
-                      ? (activeColor ?? Colors.white)
-                      : (inactiveColor ?? Colors.grey[400]),
+              color: isActive ? Colors.white : Colors.grey[700],
               fontSize: fontSize ?? 14,
-              fontWeight:
-                  isActive
-                      ? (fontWeight ?? FontWeight.w600)
-                      : FontWeight.normal,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class NewsCard extends StatelessWidget {
+  final Map<String, dynamic> newsItem;
+  final bool isSmall;
+
+  const NewsCard({super.key, required this.newsItem, this.isSmall = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withAlpha(25),
+            spreadRadius: 0,
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Image
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(12),
+              bottomLeft: Radius.circular(12),
+            ),
+            child: Image.network(
+              newsItem['imageUrl'],
+              width: 90,
+              height: 90,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  width: 90,
+                  height: 90,
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey[400],
+                    size: 24,
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // Content
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    newsItem['title'],
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: _getCategoryColor(newsItem['category']),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      newsItem['category'],
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -78,10 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final _navScrollController = ScrollController();
   late NewsController _newsController;
 
-  // int _navBarIndex = 0;
-
-  // Data navigation items
-  // final List<String> _navItems = ['Home', 'Technology', 'Sports', 'Business'];
+  final List<String> _navItems = [
+    'All',
+    'Business',
+    'Tech',
+    'Sports',
+    'Health',
+    'Science',
+    'Entertainment',
+    'General',
+  ];
 
   void _onNavTap(int index) {
     setState(() {
@@ -91,19 +183,36 @@ class _HomeScreenState extends State<HomeScreen> {
     // Handle navigation logic
     switch (index) {
       case 0:
-        print('Navigate to Home');
+        queryString = 'home';
+        print('Navigate to All');
         break;
       case 1:
+        queryString = 'business';
+        print('Navigate to Business');
+        break;
+      case 2:
         queryString = 'tech';
         print('Navigate to Technology');
         break;
-      case 2:
+      case 3:
         queryString = 'sport';
         print('Navigate to Sports');
         break;
-      case 3:
-        queryString = 'business';
-        print('Navigate to Business');
+      case 4:
+        queryString = 'health';
+        print('Navigate to Health');
+        break;
+      case 5:
+        queryString = 'science';
+        print('Navigate to Science');
+        break;
+      case 6:
+        queryString = 'entertainment';
+        print('Navigate to Entertainment');
+        break;
+      case 7:
+        queryString = 'general';
+        print('Navigate to General');
         break;
     }
   }
@@ -113,109 +222,64 @@ class _HomeScreenState extends State<HomeScreen> {
       'title': 'Ekonomi Indonesia Tumbuh 4,87% di Q1 2025',
       'description':
           'Pertumbuhan ekonomi Indonesia di kuartal pertama 2025 mencapai 4,87 persen ditopang sektor pertanian yang tumbuh double digit',
-      'date': '31 Mei 2025',
-      'category': 'business',
+      'date': '25 Mei 2025',
+      'category': 'Business',
       'writer': 'Redaksi BPS',
       'imageUrl':
-          'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=400&h=300&fit=crop',
     },
     {
-      'title': 'Kebakaran Hutan dan Lahan di Kalimantan Tengah',
+      'title': 'Inovasi Teknologi AI Terbaru 2025',
       'description':
-          'BPBD menangani kebakaran hutan dan lahan di Desa Kubu, Kecamatan Kumai, Kabupaten Kotawaringin Barat',
-      'date': '31 Mei 2025',
-      'category': 'health',
-      'writer': 'Tim BNPB',
+          'Perkembangan teknologi artificial intelligence menunjukkan kemajuan pesat dalam berbagai sektor industri',
+      'date': '24 Mei 2025',
+      'category': 'Tech',
+      'writer': 'Tim Teknologi',
       'imageUrl':
-          'https://images.unsplash.com/photo-1574263867128-c4b8e2536d24?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=400&h=300&fit=crop',
     },
     {
-      'title': 'TNI Klarifikasi Kerja Sama dengan Kampus',
+      'title': 'Prestasi Olahraga Indonesia di Kancah Internasional',
       'description':
-          'TNI menegaskan kerja sama dengan kampus sebatas wawasan kebangsaan, bela negara, dan kedisiplinan, bukan militerisasi',
-      'date': '30 Mei 2025',
-      'category': 'general',
-      'writer': 'Redaksi Kompas',
+          'Atlet Indonesia meraih berbagai prestasi membanggakan di kompetisi internasional',
+      'date': '23 Mei 2025',
+      'category': 'Sports',
+      'writer': 'Reporter Olahraga',
       'imageUrl':
-          'https://images.unsplash.com/photo-1577962917302-cd874c99e6d2?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=400&h=300&fit=crop',
+    },
+  ];
+
+  List<Map<String, dynamic>> newsListData = [
+    {
+      'title': 'Kebijakan Energi Terbarukan Indonesia Menuju 2030',
+      'category': 'Business',
+      'imageUrl':
+          'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=90&h=90&fit=crop',
     },
     {
-      'title': 'Tren Desain Kamar Bayi 2025',
-      'description':
-          'Desain minimalis modern dengan sentuhan alami dan warna-warna menenangkan menjadi tren kamar bayi tahun 2025',
-      'date': '30 Mei 2025',
-      'category': 'entertainment',
-      'writer': 'Redaksi Liputan6',
+      'title': 'Perkembangan Startup Teknologi di Asia Tenggara',
+      'category': 'Tech',
       'imageUrl':
-          'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=90&h=90&fit=crop',
     },
     {
-      'title': 'Sektor Transportasi Mengalami Pertumbuhan Solid',
-      'description':
-          'Aktivitas sektor transportasi menunjukkan kinerja yang kuat mendukung pertumbuhan ekonomi nasional',
-      'date': '29 Mei 2025',
-      'category': 'business',
-      'writer': 'Statistik Indonesia',
+      'title': 'Tips Menjaga Kesehatan di Musim Pancaroba',
+      'category': 'Health',
       'imageUrl':
-          'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=90&h=90&fit=crop',
     },
     {
-      'title': 'Manufaktur Makanan dan Minuman Tumbuh Pesat',
-      'description':
-          'Sektor manufaktur makanan dan minuman mencatat kinerja solid di kuartal pertama 2025',
-      'date': '29 Mei 2025',
-      'category': 'technology',
-      'writer': 'Analisis Ekonomi',
+      'title': 'Penelitian Terbaru tentang Perubahan Iklim',
+      'category': 'Science',
       'imageUrl':
-          'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=400&h=200&fit=crop&crop=center',
-    },
-    {
-      'title': 'Program Wawasan Kebangsaan di Perguruan Tinggi',
-      'description':
-          'Kementerian Pertahanan fokus pada program wawasan kebangsaan dan bela negara di kampus-kampus',
-      'date': '28 Mei 2025',
-      'category': 'science',
-      'writer': 'Reporter Politik',
-      'imageUrl':
-          'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=400&h=200&fit=crop&crop=center',
-    },
-    {
-      'title': 'Ketidakpastian Global Tidak Pengaruhi Ekonomi RI',
-      'description':
-          'Ekonomi Indonesia tetap bertahan dan tumbuh positif meski menghadapi ketidakpastian ekonomi global',
-      'date': '28 Mei 2025',
-      'category': 'general',
-      'writer': 'Kepala BPS',
-      'imageUrl':
-          'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=200&fit=crop&crop=center',
-    },
-    {
-      'title': 'Sektor Pertanian Catat Pertumbuhan Dua Digit',
-      'description':
-          'Sektor pertanian Indonesia mencatat pertumbuhan double digit yang menopang ekonomi nasional',
-      'date': '27 Mei 2025',
-      'category': 'general',
-      'writer': 'Redaksi Ekonomi',
-      'imageUrl':
-          'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=200&fit=crop&crop=center',
-    },
-    {
-      'title': 'Kinerja BUMN di Berbagai Sektor Meningkat',
-      'description':
-          'Badan Usaha Milik Negara menunjukkan kinerja positif di berbagai sektor strategis nasional',
-      'date': '27 Mei 2025',
-      'category': 'business',
-      'writer': 'Kilas BUMN',
-      'imageUrl':
-          'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=200&fit=crop&crop=center',
+          'https://images.unsplash.com/photo-1569163139394-de4e4f43e4e5?w=90&h=90&fit=crop',
     },
   ];
 
   @override
-  void setState(VoidCallback fn) {
-    // TODO: implement setState
-    super.setState(fn);
-
+  void initState() {
+    super.initState();
     _newsController = NewsController();
     _loadNews(queryString);
   }
@@ -227,260 +291,300 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: cSecondary,
-      body: Center(
+      backgroundColor: Colors.grey[50],
+      body: SafeArea(
         child: Column(
           children: [
-            Center(
-              child: Column(
-                children: [
-                  Image.asset('images/logo_dark.png', width: 100),
-                  vsMedium,
-                  SingleChildScrollView(
-                    controller: _navScrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 12,
-                      children:
-                          navLinks.asMap().entries.map((entry) {
-                            final index = entry.key;
-                            final item = entry.value;
-                            return NavLink(
-                              text: item,
-                              isActive: _activeIndex == index,
-                              onTap: () => _onNavTap(index),
-                              activeColor: Colors.white,
-                              inactiveColor: Colors.grey[400],
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            );
-                          }).toList(),
-                    ),
+            // Header dengan logo dan navigasi
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withAlpha(25),
+                    spreadRadius: 0,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
                   ),
                 ],
               ),
-            ),
-            vsXLarge,
-            SizedBox(
-              height: 320,
-              child: CarouselSlider(
-                options: CarouselOptions(
-                  height: 320,
-                  viewportFraction: 0.7,
-                  enableInfiniteScroll: true,
-                  autoPlay: true,
-                  autoPlayInterval: Duration(seconds: 3),
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enlargeCenterPage: true,
-                  scrollDirection: Axis.horizontal,
-                ),
-                items:
-                    carouselData.map((newsItem) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withAlpha(10),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  children: [
+                    // Logo
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'vartaa',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 1,
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Image with category badge overlay
-                              Stack(
-                                children: [
-                                  ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(14),
-                                    ),
-                                    child: Image.network(
-                                      newsItem['imageUrl'],
-                                      width: double.infinity,
-                                      fit: BoxFit.cover,
-                                      loadingBuilder: (
-                                        context,
-                                        child,
-                                        loadingProgress,
-                                      ) {
-                                        if (loadingProgress == null) {
-                                          return child;
-                                        }
-                                        return Container(
-                                          height: 120,
-                                          width: double.infinity,
-                                          color: Colors.grey[200],
-                                          child: Center(
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      errorBuilder: (
-                                        context,
-                                        error,
-                                        stackTrace,
-                                      ) {
-                                        return Container(
-                                          height: 120,
-                                          width: double.infinity,
-                                          color: Colors.grey[200],
-                                          child: Icon(
-                                            Icons.image_not_supported,
-                                            color: Colors.grey[400],
-                                            size: 40,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  // Category badge overlay
-                                  Positioned(
-                                    top: 10,
-                                    left: 10,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: _getCategoryColor(
-                                          newsItem['category'],
-                                        ),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Text(
-                                        newsItem['category'].toUpperCase(),
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: overline.fontSize,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                        Icon(
+                          Icons.notifications_outlined,
+                          color: Colors.grey[600],
+                          size: 24,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
 
-                              // Content section
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                    // Navigation tabs
+                    SingleChildScrollView(
+                      controller: _navScrollController,
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children:
+                            _navItems.asMap().entries.map((entry) {
+                              final index = entry.key;
+                              final item = entry.value;
+                              return NavLink(
+                                text: item,
+                                isActive: _activeIndex == index,
+                                onTap: () => _onNavTap(index),
+                              );
+                            }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Content area
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 20),
+
+                    // Featured carousel
+                    SizedBox(
+                      height: 320,
+                      child: CarouselSlider(
+                        options: CarouselOptions(
+                          height: 320,
+                          viewportFraction: 0.88,
+                          enableInfiniteScroll: true,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 4),
+                          autoPlayAnimationDuration: Duration(
+                            milliseconds: 800,
+                          ),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: true,
+                          scrollDirection: Axis.horizontal,
+                        ),
+                        items:
+                            carouselData.map((newsItem) {
+                              return Container(
+                                margin: EdgeInsets.symmetric(horizontal: 8),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withAlpha(25),
+                                      spreadRadius: 0,
+                                      blurRadius: 10,
+                                      offset: Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Stack(
+                                    fit: StackFit.expand,
                                     children: [
-                                      // Title
-                                      Text(
-                                        newsItem['title'],
-                                        style: TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          height: 1.2,
-                                        ),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
+                                      // Background image
+                                      Image.network(
+                                        newsItem['imageUrl'],
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (
+                                          context,
+                                          error,
+                                          stackTrace,
+                                        ) {
+                                          return Container(
+                                            color: Colors.grey[300],
+                                            child: Icon(
+                                              Icons.image_not_supported,
+                                              color: Colors.grey[500],
+                                              size: 50,
+                                            ),
+                                          );
+                                        },
                                       ),
-                                      vsSuperTiny,
 
-                                      // Description
-                                      Expanded(
-                                        child: Text(
-                                          newsItem['description'],
-                                          style: TextStyle(
-                                            color: Colors.grey[600],
-                                            fontSize: 12,
-                                            height: 1.3,
+                                      // Gradient overlay
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              Colors.black.withAlpha(180),
+                                            ],
                                           ),
-                                          maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
 
-                                      vsTiny,
-
-                                      // Bottom info (date and writer)
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              newsItem['date'],
-                                              style: TextStyle(
-                                                color: Colors.grey[500],
-                                                fontSize: 10,
+                                      // Content overlay
+                                      Positioned(
+                                        bottom: 20,
+                                        left: 20,
+                                        right: 20,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            // Category badge
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 6,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: _getCategoryColor(
+                                                  newsItem['category'],
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              child: Text(
+                                                newsItem['category']
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w600,
+                                                  letterSpacing: 0.5,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              'By ${newsItem['writer']}',
+                                            SizedBox(height: 12),
+
+                                            // Title
+                                            Text(
+                                              newsItem['title'],
                                               style: TextStyle(
-                                                color: Colors.grey[500],
-                                                fontSize: 10,
-                                                fontStyle: FontStyle.italic,
+                                                color: Colors.white,
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1.2,
                                               ),
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                             ),
-                                          ),
-                                        ],
+                                            SizedBox(height: 8),
+
+                                            // Description
+                                            Text(
+                                              newsItem['description'],
+                                              style: TextStyle(
+                                                color: Colors.white.withAlpha(
+                                                  220,
+                                                ),
+                                                fontSize: 13,
+                                                height: 1.3,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(height: 12),
+
+                                            // Bottom info
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  newsItem['date'],
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withAlpha(180),
+                                                    fontSize: 11,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  newsItem['writer'],
+                                                  style: TextStyle(
+                                                    color: Colors.white
+                                                        .withAlpha(180),
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                      ),
+                    ),
+
+                    SizedBox(height: 30),
+
+                    // News list section
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Berita Terbaru',
+                                style: TextStyle(
+                                  color: Colors.black87,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'Lihat Semua',
+                                  style: TextStyle(
+                                    color: Colors.blue[600],
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      );
-                    }).toList(),
+                          SizedBox(height: 15),
+
+                          // News cards
+                          ...newsListData.map(
+                            (newsItem) => NewsCard(newsItem: newsItem),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
             ),
           ],
         ),
-        // ListView Builder
       ),
-      // bottomNavigationBar: BottomNavigationBar(
-      //   selectedItemColor: cBlack,
-      //   unselectedItemColor: cBlack,
-      //   selectedFontSize: 12,
-      //   currentIndex: _navBarIndex,
-      //   onTap: _onBottomNavTap,
-      //   items: [
-      //     BottomNavigationBarItem(
-      //       icon: PhosphorIcon(PhosphorIcons.house(), size: 14),
-      //       label: 'Beranda',
-      //       backgroundColor: cPrimary,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: PhosphorIcon(PhosphorIcons.newspaper(), size: 14),
-      //       label: 'Kategori',
-      //       backgroundColor: cPrimary,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: PhosphorIcon(PhosphorIcons.magnifyingGlass(), size: 14),
-      //       label: 'Cari',
-      //       backgroundColor: cPrimary,
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: PhosphorIcon(PhosphorIcons.user(), size: 14),
-      //       label: 'Profil',
-      //       backgroundColor: cPrimary,
-      //     ),
-      //   ],
-      // ),
     );
   }
 }
@@ -488,20 +592,23 @@ class _HomeScreenState extends State<HomeScreen> {
 Color _getCategoryColor(String category) {
   switch (category.toLowerCase()) {
     case 'business':
-      return Colors.green;
+      return Colors.green[600]!;
     case 'entertainment':
-      return Colors.blue;
+      return Colors.purple[600]!;
     case 'general':
-      return Colors.teal;
+      return Colors.blue[600]!;
     case 'health':
-      return Colors.pink;
+      return Colors.pink[600]!;
     case 'science':
-      return Colors.orange;
+      return Colors.orange[600]!;
     case 'sports':
-      return Colors.purple;
+      return Colors.red[600]!;
     case 'technology':
-      return Colors.lightGreen;
+    case 'tech':
+      return Colors.indigo[600]!;
+    case 'life':
+      return Colors.teal[600]!;
     default:
-      return cPrimary;
+      return Colors.grey[600]!;
   }
 }

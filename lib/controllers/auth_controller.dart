@@ -5,15 +5,15 @@ import 'package:http/http.dart';
 
 // Import model dan konstanta API yang diperlukan
 import 'package:vartaa/constants/api_constants.dart';
-import 'package:vartaa/models/user.dart';
+import 'package:vartaa/models/author.dart';
 
 class AuthController with ChangeNotifier {
-  UserModel? _currentUser;
+  Author? _currentUser;
   bool _isLoading = false;
   String? _errorMessage;
 
   // Getter untuk mengakses state dari luar kelas
-  UserModel? get currentUser => _currentUser;
+  Author? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _currentUser != null;
@@ -41,7 +41,7 @@ class AuthController with ChangeNotifier {
       if (response.statusCode == 200) {
         // Jika login sukses, dekode respons dan simpan data pengguna
         final data = jsonDecode(response.body);
-        _currentUser = UserModel.fromJson(
+        _currentUser = Author.fromJson(
           data,
         ); // Asumsikan respons berisi data pengguna
         _errorMessage = null; // Pastikan tidak ada pesan error
@@ -96,7 +96,7 @@ class AuthController with ChangeNotifier {
   //       // Asumsikan 201 Created untuk registrasi sukses
   //       // Jika registrasi sukses, dekode respons dan mungkin login otomatis
   //       final data = jsonDecode(response.body);
-  //       _currentUser = UserModel.fromJson(
+  //       _currentUser = Author.fromJson(
   //         data,
   //       ); // Asumsikan respons berisi data pengguna baru
   //       _errorMessage = null; // Pastikan tidak ada pesan error
@@ -153,7 +153,7 @@ class AuthController with ChangeNotifier {
       await Future.delayed(const Duration(seconds: 1)); // Simulasi pengecekan
 
       // Jika token valid dan bisa mendapatkan data pengguna:
-      // _currentUser = UserModel.fromJson(data);
+      // _currentUser = Author.fromJson(data);
       // Jika tidak ada atau tidak valid:
       _currentUser = null;
     } catch (e) {

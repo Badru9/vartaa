@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vartaa/screens/auth/register_screen.dart';
@@ -6,6 +7,7 @@ import 'package:vartaa/screens/home_screen.dart';
 import 'package:vartaa/utils/form_validator.dart';
 import 'package:vartaa/utils/helper.dart';
 import 'package:vartaa/controllers/auth_controller.dart';
+import 'package:vartaa/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -165,30 +167,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                       : _handleLogin,
                               child:
                                   authController.isLoading
-                                      ? const CircularProgressIndicator(
-                                        color: Colors.white,
+                                      ? LoadingAnimationWidget.inkDrop(
+                                        color: cSecondary,
+                                        size: 20,
                                       )
                                       : Text('Masuk', style: subtitle2),
                             ),
                           ),
-                          const SizedBox(height: 14),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("Belum memiliki akun?"),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RegisterScreen(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Buat Akun Baru'),
-                              ),
-                            ],
-                          ),
+                          // const SizedBox(height: 14),
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     const Text("Belum memiliki akun?"),
+                          //     TextButton(
+                          //       onPressed: () {
+                          //         Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //             builder: (context) => RegisterScreen(),
+                          //           ),
+                          //         );
+                          //       },
+                          //       child: const Text('Buat Akun Baru'),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
