@@ -193,183 +193,175 @@ class _HomeScreenContentState extends State<HomeScreenContent> {
                           enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal,
                         ),
-                        items:
-                            newsController.headlines.map((newsItem) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (newsItem.slug != null &&
-                                      newsItem.slug!.isNotEmpty) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => NewsDetailScreen(
-                                              slug: newsItem.slug!,
-                                            ),
-                                      ),
-                                    );
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text(
-                                          'Detail berita tidak tersedia (slug kosong).',
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 8,
+                        items: newsController.headlines.map((newsItem) {
+                          return GestureDetector(
+                            onTap: () {
+                              if (newsItem.slug != null &&
+                                  newsItem.slug!.isNotEmpty) {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => NewsDetailScreen(
+                                      slug: newsItem.slug!,
+                                    ),
                                   ),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withAlpha(25),
-                                        spreadRadius: 0,
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Detail berita tidak tersedia (slug kosong).',
+                                    ),
                                   ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Stack(
-                                      fit: StackFit.expand,
-                                      children: [
-                                        // Background image
-                                        (newsItem.featuredImageUrl != null &&
-                                                newsItem
-                                                    .featuredImageUrl!
-                                                    .isNotEmpty)
-                                            ? Image.network(
-                                              newsItem.featuredImageUrl!,
-                                              fit: BoxFit.cover,
-                                              errorBuilder: (
-                                                context,
-                                                error,
-                                                stackTrace,
-                                              ) {
-                                                return Container(
-                                                  color: Colors.grey[300],
-                                                  child: Icon(
-                                                    Icons.image_not_supported,
-                                                    color: Colors.grey[500],
-                                                    size: 50,
-                                                  ),
-                                                );
-                                              },
-                                            )
-                                            : Container(
-                                              // Placeholder jika tidak ada gambar
-                                              color: Colors.grey[300],
-                                              child: Icon(
-                                                Icons.image_not_supported,
-                                                color: Colors.grey[500],
-                                                size: 50,
-                                              ),
-                                            ),
-
-                                        // Gradient overlay
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                              begin: Alignment.topCenter,
-                                              end: Alignment.bottomCenter,
-                                              colors: [
-                                                Colors.transparent,
-                                                Colors.black.withAlpha(180),
-                                              ],
+                                );
+                              }
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(25),
+                                    spreadRadius: 0,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    // Background image
+                                    (newsItem.featuredImageUrl != null &&
+                                            newsItem
+                                                .featuredImageUrl!.isNotEmpty)
+                                        ? Image.network(
+                                            newsItem.featuredImageUrl!,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (
+                                              context,
+                                              error,
+                                              stackTrace,
+                                            ) {
+                                              return Container(
+                                                color: Colors.grey[300],
+                                                child: Icon(
+                                                  Icons.image_not_supported,
+                                                  color: Colors.grey[500],
+                                                  size: 50,
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : Container(
+                                            // Placeholder jika tidak ada gambar
+                                            color: Colors.grey[300],
+                                            child: Icon(
+                                              Icons.image_not_supported,
+                                              color: Colors.grey[500],
+                                              size: 50,
                                             ),
                                           ),
+
+                                    // Gradient overlay
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          colors: [
+                                            Colors.transparent,
+                                            Colors.black.withAlpha(180),
+                                          ],
                                         ),
+                                      ),
+                                    ),
 
-                                        // Content overlay
-                                        Positioned(
-                                          bottom: 20,
-                                          left: 20,
-                                          right: 20,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                    // Content overlay
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 20,
+                                      right: 20,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Category badge
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 12,
+                                              vertical: 6,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: getCategoryColor(
+                                                newsItem.category,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                            ),
+                                            child: Text(
+                                              newsItem.category.toUpperCase(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w600,
+                                                letterSpacing: 0.5,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 12),
+
+                                          // Title
+                                          Text(
+                                            newsItem.title,
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.2,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 8),
+
+                                          // Bottom info
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
                                             children: [
-                                              // Category badge
-                                              Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 6,
-                                                    ),
-                                                decoration: BoxDecoration(
-                                                  color: getCategoryColor(
-                                                    newsItem.category,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(15),
-                                                ),
-                                                child: Text(
-                                                  newsItem.category
-                                                      .toUpperCase(),
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 10,
-                                                    fontWeight: FontWeight.w600,
-                                                    letterSpacing: 0.5,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 12),
-
-                                              // Title
                                               Text(
-                                                newsItem.title,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                  height: 1.2,
+                                                newsItem.formattedDate,
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withAlpha(180),
+                                                  fontSize: 11,
                                                 ),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(height: 8),
-
-                                              // Bottom info
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    newsItem.formattedDate,
-                                                    style: TextStyle(
-                                                      color: Colors.white
-                                                          .withAlpha(180),
-                                                      fontSize: 11,
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    newsItem.authorName ??
-                                                        'Vartaa',
-                                                    style: TextStyle(
-                                                      color: Colors.white
-                                                          .withAlpha(180),
-                                                      fontSize: 11,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ],
+                                              Text(
+                                                newsItem.authorName ?? 'Vartaa',
+                                                style: TextStyle(
+                                                  color: Colors.white
+                                                      .withAlpha(180),
+                                                  fontSize: 11,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              );
-                            }).toList(),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
 
