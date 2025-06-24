@@ -1,167 +1,143 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
-
-// Import model dan konstanta API yang diperlukan
-import 'package:vartaa/constants/api_constants.dart';
 import 'package:vartaa/models/author.dart';
+import 'package:vartaa/services/auth_service.dart';
+import 'package:vartaa/screens/auth/login_screen.dart';
+import 'package:vartaa/main.dart';
 
-class AuthController with ChangeNotifier {
-  Author? _currentUser;
+class AuthController extends ChangeNotifier {
+  final AuthService _authService = AuthService();
+
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isAuthenticated = false;
+  Author? _currentAuthor;
+  bool _isProfileLoading = false;
+  String? _profileErrorMessage;
 
-  // Getter untuk mengakses state dari luar kelas
-  Author? get currentUser => _currentUser;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-  bool get isAuthenticated => _currentUser != null;
+  bool get isAuthenticated => _isAuthenticated;
+  Author? get currentAuthor => _currentAuthor;
 
-  Future<void> login({required String email, required String password}) async {
-    _isLoading = true; // Set status loading menjadi true
-    _errorMessage = null; // Reset pesan error
-    notifyListeners(); // Beri tahu listener bahwa state telah berubah (loading dimulai)
+  bool get isProfileLoading => _isProfileLoading;
+  String? get profileErrorMessage => _profileErrorMessage;
 
-    try {
-      final uri = Uri.parse(
-        '${ApiConstant.baseUrl}${ApiConstant.loginEndpoint}',
-      );
-
-      print('Melakukan login dengan email: $email'); // Debugging
-
-      final Response response = await http.post(
-        uri,
-        headers: ApiConstant.headers,
-        body: jsonEncode({'email': email, 'password': password}),
-      );
-
-      print('response.body ${response.statusCode}');
-
-      if (response.statusCode == 200) {
-        // Jika login sukses, dekode respons dan simpan data pengguna
-        final data = jsonDecode(response.body);
-        _currentUser = Author.fromJson(
-          data,
-        ); // Asumsikan respons berisi data pengguna
-        _errorMessage = null; // Pastikan tidak ada pesan error
-        print('Login berhasil untuk pengguna: ${_currentUser?.email}');
-      } else {
-        // Jika login gagal, set pesan error
-        final errorData = jsonDecode(response.body);
-        _errorMessage =
-            'Login gagal: ${errorData['message'] ?? 'Status code: ${response.statusCode}'}';
-        _currentUser = null; // Kosongkan pengguna saat ini jika gagal
-        print('Login gagal: $_errorMessage');
-      }
-    } catch (e) {
-      // Menangani error jaringan atau error lainnya
-      _errorMessage = 'Terjadi kesalahan saat login: ${e.toString()}';
-      _currentUser = null; // Kosongkan pengguna saat ini jika ada error
-      print('Error saat login: $_errorMessage');
-    } finally {
-      _isLoading = false; // Set status loading menjadi false
-      notifyListeners(); // Beri tahu listener bahwa state telah berubah (loading selesai)
-    }
-  }
-
-  /// Metode ini menangani proses registrasi pengguna baru.
-  /// Ini menerima [email] dan [password], melakukan panggilan API,
-  /// memproses respons, dan memperbarui state.
-  // Future<void> register({
-  //   required String email,
-  //   required String password,
-  // }) async {
-  //   _isLoading = true; // Set status loading menjadi true
-  //   _errorMessage = null; // Reset pesan error
-  //   notifyListeners(); // Beri tahu listener bahwa state telah berubah (loading dimulai)
-
-  //   try {
-  //     final uri = Uri.parse(
-  //       '${ApiConstant.baseUrl}${ApiConstant.registerEndpoint}',
-  //     );
-
-  //     print('Melakukan registrasi dengan email: $email'); // Debugging
-
-  //     final Response response = await http.post(
-  //       uri,
-  //       headers: ApiConstant.headers, // Menggunakan header standar
-  //       body: jsonEncode({
-  //         'email': email,
-  //         'password': password,
-  //       }), // Mengirim kredensial dalam body JSON
-  //     );
-
-  //     if (response.statusCode == 201) {
-  //       // Asumsikan 201 Created untuk registrasi sukses
-  //       // Jika registrasi sukses, dekode respons dan mungkin login otomatis
-  //       final data = jsonDecode(response.body);
-  //       _currentUser = Author.fromJson(
-  //         data,
-  //       ); // Asumsikan respons berisi data pengguna baru
-  //       _errorMessage = null; // Pastikan tidak ada pesan error
-  //       print('Registrasi berhasil untuk pengguna: ${_currentUser?.email}');
-  //     } else {
-  //       // Jika registrasi gagal, set pesan error
-  //       final errorData = jsonDecode(response.body);
-  //       _errorMessage =
-  //           'Registrasi gagal: ${errorData['message'] ?? 'Status code: ${response.statusCode}'}';
-  //       _currentUser = null; // Kosongkan pengguna saat ini jika gagal
-  //       print('Registrasi gagal: $_errorMessage');
-  //     }
-  //   } catch (e) {
-  //     // Menangani error jaringan atau error lainnya
-  //     _errorMessage = 'Terjadi kesalahan saat registrasi: ${e.toString()}';
-  //     _currentUser = null; // Kosongkan pengguna saat ini jika ada error
-  //     print('Error saat registrasi: $_errorMessage');
-  //   } finally {
-  //     _isLoading = false; // Set status loading menjadi false
-  //     notifyListeners(); // Beri tahu listener bahwa state telah berubah (loading selesai)
-  //   }
-  // }
-
-  /// Metode ini menangani proses logout pengguna.
-  /// Ini hanya membersihkan state pengguna saat ini.
-  Future<void> logout() async {
-    _isLoading = true; // Set status loading
-    notifyListeners();
-
-    // Dalam aplikasi nyata, Anda mungkin ingin memanggil API logout ke backend
-    // dan menghapus token dari penyimpanan lokal (misalnya SharedPreferences).
-    // Untuk contoh ini, kita hanya membersihkan state lokal.
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-    ); // Simulasi penundaan API
-
-    _currentUser = null; // Hapus pengguna yang sedang login
-    _errorMessage = null; // Reset pesan error
-    _isLoading = false; // Set status loading
-    notifyListeners(); // Beri tahu listener bahwa state telah berubah (logout selesai)
-    print('Pengguna berhasil logout.');
-  }
-
-  /// Metode ini bisa digunakan untuk menginisialisasi status autentikasi,
-  /// misalnya dengan memeriksa token yang tersimpan di penyimpanan lokal.
+  // Inisialisasi: Periksa status autentikasi saat app pertama kali dibuka
   Future<void> checkAuthStatus() async {
     _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-
     try {
-      // Di sini Anda akan memeriksa apakah ada token autentikasi yang tersimpan
-      // Misalnya: final storedToken = await SharedPreferences.getInstance().getString('user_token');
-      // Jika ada, Anda bisa mencoba memvalidasinya atau mengambil ulang data pengguna.
-      await Future.delayed(const Duration(seconds: 1)); // Simulasi pengecekan
-
-      // Jika token valid dan bisa mendapatkan data pengguna:
-      // _currentUser = Author.fromJson(data);
-      // Jika tidak ada atau tidak valid:
-      _currentUser = null;
+      final author =
+          await _authService
+              .getAuthenticatedAuthor(); // Panggil getAuthenticatedAuthor
+      if (author != null) {
+        _isAuthenticated = true;
+        _currentAuthor = author;
+        print('Author already authenticated: ${author.email}');
+      } else {
+        _isAuthenticated = false;
+        _currentAuthor = null;
+        print('No authenticated author found.');
+      }
     } catch (e) {
-      _errorMessage = 'Gagal memeriksa status autentikasi: ${e.toString()}';
-      _currentUser = null;
+      _isAuthenticated = false;
+      _currentAuthor = null;
+      _errorMessage = 'Failed to check auth status: ${e.toString()}';
+      debugPrint('Error checking auth status: $e');
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> login({required String email, required String password}) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      await _authService.login(email: email, password: password);
+      // Data author sudah disimpan di AuthService, kita bisa ambil lagi
+      _currentAuthor = await _authService.getAuthenticatedAuthor();
+      _isAuthenticated = true;
+      _errorMessage = null;
+      print('Login successful for author: ${_currentAuthor?.email}');
+    } catch (e) {
+      _isAuthenticated = false;
+      _currentAuthor = null;
+      _errorMessage = e.toString().replaceFirst('Exception: ', '');
+      debugPrint('Login failed: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Future<void> register({
+  //   required String name,
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   _isLoading = true;
+  //   _errorMessage = null;
+  //   notifyListeners();
+  //   try {
+  //     await _authService.register(name: name, email: email, password: password);
+  //     _errorMessage = null;
+  //     if (navigatorKey.currentContext != null) {
+  //       ScaffoldMessenger.of(navigatorKey.currentContext!).showSnackBar(
+  //         const SnackBar(content: Text('Registrasi Berhasil! Silakan Login.')),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     _errorMessage = e.toString().replaceFirst('Exception: ', '');
+  //     debugPrint('Registration failed: $e');
+  //   } finally {
+  //     _isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
+
+  Future<void> logout() async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    await _authService.clearAuthData();
+    _isAuthenticated = false;
+    _currentAuthor = null;
+    _isLoading = false;
+    notifyListeners();
+    if (navigatorKey.currentContext != null) {
+      Navigator.of(navigatorKey.currentContext!).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  Future<void> fetchAuthorProfile() async {
+    _isProfileLoading = true;
+    _profileErrorMessage = null;
+    notifyListeners();
+    try {
+      final authorProfile = await _authService.fetchAuthorProfile();
+      _currentAuthor = authorProfile; // Update currentAuthor with fresh data
+      _isProfileLoading = false;
+    } catch (e) {
+      _profileErrorMessage = e.toString().replaceFirst('Exception: ', '');
+      _isProfileLoading = false;
+      debugPrint('Error fetching author profile: $e');
+      // If token is invalid (e.g., 401 Unauthorized), force logout
+      if (_profileErrorMessage!.toLowerCase().contains('unauthorized')) {
+        logout();
+      }
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  void clearErrorMessage() {
+    _errorMessage = null;
+    notifyListeners();
   }
 }

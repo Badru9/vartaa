@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:vartaa/screens/auth/register_screen.dart';
 import 'package:vartaa/screens/home_screen.dart';
 import 'package:vartaa/utils/form_validator.dart';
 import 'package:vartaa/utils/helper.dart';
 import 'package:vartaa/controllers/auth_controller.dart';
-import 'package:vartaa/utils/helper.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,10 +36,15 @@ class _LoginScreenState extends State<LoginScreen> {
             duration: const Duration(seconds: 3),
           ),
         );
+        authController.clearErrorMessage();
       } else if (authController.isAuthenticated && !authController.isLoading) {
+        // Navigasi setelah login berhasil (contoh: ke HomeScreen)
+        // Jika Anda hanya ingin AuthorDashboardScreen, maka ganti ke sana
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ), // Atau const AuthorDashboardScreen()
         );
       }
     };
@@ -94,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Image.asset('images/logo_light.png', width: 150),
-                          vsXLarge,
+                          vsXLarge, // Menggunakan vsXLarge dari helper.dart
                           TextFormField(
                             controller: _emailController,
                             decoration: InputDecoration(
@@ -102,7 +105,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               hintStyle: subtitle2,
                               labelText: "Email",
                               labelStyle: subtitle2,
-                              border: defaultInputBorder,
+                              border:
+                                  defaultInputBorder, // Menggunakan defaultInputBorder dari helper.dart
+                              enabledBorder:
+                                  defaultInputBorder, // Border saat tidak fokus
+                              focusedBorder:
+                                  focusedInputBorder, // Border saat fokus, seharusnya warna primary
+                              errorBorder:
+                                  errorInputBorder, // Border saat error
+                              focusedErrorBorder:
+                                  errorInputBorder, // Border saat fokus dan error
                               prefixIcon: Padding(
                                 padding: EdgeInsets.only(left: 12),
                                 child: PhosphorIcon(
@@ -112,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            validator: validateEmail,
+                            validator: (value) => validateEmail(value),
                           ),
                           const SizedBox(height: 14),
                           TextFormField(
@@ -124,6 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
                               labelText: "Password",
                               labelStyle: subtitle2,
                               border: defaultInputBorder,
+                              enabledBorder: defaultInputBorder,
+                              focusedBorder: focusedInputBorder,
+                              errorBorder: errorInputBorder,
+                              focusedErrorBorder: errorInputBorder,
                               prefixIcon: Padding(
                                 padding: EdgeInsets.only(left: 12),
                                 child: PhosphorIcon(
@@ -155,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            validator: validatePassword,
+                            validator: (value) => validatePassword(value),
                           ),
                           const SizedBox(height: 14),
                           SizedBox(
@@ -165,33 +181,30 @@ class _LoginScreenState extends State<LoginScreen> {
                                   authController.isLoading
                                       ? null
                                       : _handleLogin,
+                              style: ElevatedButton.styleFrom(
+                                // Styling button
+                                backgroundColor: cPrimary,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
                               child:
                                   authController.isLoading
                                       ? LoadingAnimationWidget.inkDrop(
-                                        color: cSecondary,
+                                        color: cBlack,
                                         size: 20,
                                       )
-                                      : Text('Masuk', style: subtitle2),
+                                      : Text(
+                                        'Masuk',
+                                        style: subtitle2.copyWith(
+                                          color: cBlack,
+                                        ),
+                                      ),
                             ),
                           ),
-                          // const SizedBox(height: 14),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.center,
-                          //   children: [
-                          //     const Text("Belum memiliki akun?"),
-                          //     TextButton(
-                          //       onPressed: () {
-                          //         Navigator.push(
-                          //           context,
-                          //           MaterialPageRoute(
-                          //             builder: (context) => RegisterScreen(),
-                          //           ),
-                          //         );
-                          //       },
-                          //       child: const Text('Buat Akun Baru'),
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),

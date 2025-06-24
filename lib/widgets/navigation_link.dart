@@ -9,7 +9,6 @@ class NavLink extends StatelessWidget {
   final double? fontSize;
   final FontWeight? fontWeight;
   final EdgeInsetsGeometry? padding;
-  final TextStyle? textStyle;
 
   const NavLink({
     super.key,
@@ -21,33 +20,30 @@ class NavLink extends StatelessWidget {
     this.fontSize,
     this.fontWeight,
     this.padding,
-    this.textStyle,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding:
-            padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Text(
-          text,
-          style:
-              textStyle ??
-              TextStyle(
-                color:
-                    isActive
-                        ? (activeColor ?? theme.primaryColor)
-                        : (inactiveColor ?? theme.textTheme.bodyMedium?.color),
-                fontSize: fontSize ?? 16,
-                fontWeight:
-                    isActive
-                        ? (fontWeight ?? FontWeight.w600)
-                        : FontWeight.normal,
-              ),
+            padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: isActive ? Colors.black : Colors.transparent,
+            border: Border.all(color: Colors.grey.withAlpha(100), width: 1),
+          ),
+          child: Text(
+            text,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.grey[700],
+              fontSize: fontSize ?? 14,
+              fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
         ),
       ),
     );

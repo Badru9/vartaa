@@ -1,4 +1,7 @@
-/// Model untuk merepresentasikan data pengguna.
+// lib/models/author_model.dart
+import 'package:intl/intl.dart';
+import 'package:flutter/foundation.dart' show UniqueKey;
+
 class Author {
   final String id;
   final String email;
@@ -7,6 +10,8 @@ class Author {
   final String? bio;
   final String? avatarUrl;
   final bool isActive;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   Author({
     required this.id,
@@ -15,43 +20,65 @@ class Author {
     required this.lastName,
     this.bio,
     this.avatarUrl,
-    this.isActive = false,
+    this.isActive = false, // Default value, but prefer to parse from API
+    this.createdAt,
+    this.updatedAt,
   });
 
-  /// Factory constructor untuk membuat instance [Author] dari JSON.
+  String get fullName => '$firstName $lastName'.trim();
+
   factory Author.fromJson(Map<String, dynamic> json) {
     bool parsedIsActive = false;
+    // Handle parsing isActive, as it might come in various types
     if (json['isActive'] is bool) {
       parsedIsActive = json['isActive'];
     } else if (json['isActive'] is String) {
-      // Contoh: jika API mengirim "true" atau "false" sebagai string
       parsedIsActive = (json['isActive'] as String).toLowerCase() == 'true';
     } else if (json['isActive'] is int) {
-      // Contoh: jika API mengirim 0 atau 1
       parsedIsActive = json['isActive'] == 1;
     }
 
+    DateTime? parseDate(dynamic dateValue) {
+      // Accept dynamic to handle null or non-string values gracefully
+      if (dateValue == null) return null;
+      if (dateValue is String) {
+        try {
+          return DateTime.parse(dateValue);
+        } catch (e) {
+          print('Error parsing date string: $dateValue, $e');
+          return null;
+        }
+      }
+      return null;
+    }
+
     return Author(
-      id: json['id'] ?? '',
-      email: json['email'] ?? '',
-      firstName: json['id'] ?? '',
-      lastName: json['id'] ?? '',
-      bio: json['id'] ?? '',
-      avatarUrl: json['id'] ?? '',
+      id:
+          json['id'] as String? ??
+          UniqueKey()
+              .toString(), // Use UniqueKey as a fallback ID if API doesn't provide
+      email: json['email'] as String? ?? '',
+      firstName: json['firstname'] as String? ?? '',
+      lastName: json['lastname'] as String? ?? '',
+      bio: json['bio'] as String?,
+      avatarUrl: json['avatarUrl'] as String?,
       isActive: parsedIsActive,
+      createdAt: parseDate(json['createdAt']),
+      updatedAt: parseDate(json['updatedAt']),
     );
   }
 
-  /// Mengonversi instance [Author] menjadi Map JSON.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'email': email,
-      'firstName': firstName,
-      'lastName': lastName,
+      'firstname': firstName,
+      'lastname': lastName,
       'bio': bio,
       'avatarUrl': avatarUrl,
       'isActive': isActive,
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 }

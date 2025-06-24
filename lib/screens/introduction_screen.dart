@@ -102,17 +102,8 @@ class _IntroductionScreenState extends State<IntroductionScreen> {
                             height: 349,
                           ),
                           const SizedBox(height: 80),
-                          Text(
-                            page['title'],
-                            style: headline3.copyWith(
-                              color: cSecondary,
-                              fontWeight: bold,
-                            ),
-                          ),
-                          Text(
-                            page['subtitle'],
-                            style: subtitle1.copyWith(color: cSecondary),
-                          ),
+                          Text(page['title']),
+                          Text(page['subtitle']),
                         ],
                       ),
                     ),
