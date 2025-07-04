@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vartaa/controllers/bookmark_controller.dart';
 import 'package:vartaa/screens/home_screen.dart';
-import 'package:vartaa/screens/news_detail_screen.dart';
 
 class SavedNewsScreen extends StatefulWidget {
   const SavedNewsScreen({super.key});

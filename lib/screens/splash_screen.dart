@@ -1,8 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:vartaa/screens/home_screen.dart';
 import 'package:vartaa/utils/helper.dart';
-import 'dart:async';
 import 'introduction_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -43,9 +41,8 @@ class _SplashScreenState extends State<SplashScreen>
           centered: true,
           curve: Curves.bounceOut,
           splashTransition: SplashTransition.slideTransition,
-          animationDuration: Duration(milliseconds: 1100),
+          animationDuration: const Duration(milliseconds: 1100),
           nextScreen: const IntroductionScreen(),
-          // nextScreen: const HomeScreen(),
           duration: 3100,
         ),
       ),

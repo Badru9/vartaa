@@ -15,14 +15,13 @@ dependencies:
   google_fonts: ^6.2.1
   # go_router: # (aktifkan jika dipakai)
   # flutter_screenutil: # (aktifkan jika dipakai)
-  # flutter_native_splash: # (aktifkan jika dipakai)
 
   phosphor_flutter: ^2.1.0
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.1.1
   http: ^1.2.1
   provider: ^6.0.5
   loading_animation_widget: ^1.2.0+4
-  intl: ^0.18.1
+  intl: ^0.20.2
   shared_preferences: ^2.2.3
 
   # --- Tambahkan kembali package yang terhapus di sini ---
@@ -34,15 +33,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^3.0.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter_launcher_icons:
   android: 'launcher_icon'
   ios: true
-  image_path: 'assets/images/logo_light.png'
+  image_path: 'images/logo_light.png'
   adaptive_icon_background: '#FFFFFF'
-  adaptive_icon_foreground: 'assets/images/logo_dark.png'
+  adaptive_icon_foreground: 'images/logo_dark.png'
 
 flutter:
   uses-material-design: true
